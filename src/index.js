@@ -1,5 +1,5 @@
 /**
- * 修正 global.console，以便可以在不同的环境打印不同级别的日志
+ * Node 控制台
  * @author ydr.me
  * @create 2015-12-10 21:35
  */
@@ -14,8 +14,6 @@ var object = require('blear.utils.object');
 var typeis = require('blear.utils.typeis');
 var string = require('blear.utils.string');
 
-var console = global.console;
-var oldLog = console.log;
 
 var colorCodes = {
     bold: [1, 22],
@@ -116,7 +114,7 @@ var format = function (obj) {
  */
 var makeColor = function (color) {
     return function () {
-        var msg = console.format.apply(global, arguments);
+        var msg = consoleFormat.apply(null, arguments);
 
         if (!color) {
             return msg;
@@ -131,7 +129,7 @@ var makeColor = function (color) {
     };
 };
 
-console.colors = {
+exports.colors = {
     // forcecolor
     black: makeColor('black'),
     red: makeColor('red'),
@@ -178,7 +176,7 @@ console.colors = {
  * 格式化
  * @returns {string}
  */
-console.format = function (/*arguments*/) {
+var consoleFormat = exports.format = function (/*arguments*/) {
     return access.args(arguments).map(format).join(' ');
 };
 
@@ -189,18 +187,18 @@ console.format = function (/*arguments*/) {
  * @param _colors {Array}
  * @returns {String}
  */
-console.pretty = function (_out/*arguments*/, _colors) {
+var consolePretty = exports.pretty = function (_out/*arguments*/, _colors) {
     var args = access.args(arguments);
     var colors = args.pop();
-    var out = console.format.apply(console, args);
+    var out = consoleFormat.apply(null, args);
 
     colors = typeis.Array(colors) ? colors : [colors];
 
     collection.each(colors, function (index, color) {
         color = String(color);
 
-        if (typeis.Function(console.colors[color])) {
-            out = console.colors[color](out);
+        if (typeis.Function(exports.colors[color])) {
+            out = exports.colors[color](out);
         }
     });
 
@@ -241,7 +239,7 @@ var buildConfigLevelMap = function () {
  * 配置
  * @returns {*}
  */
-console.config = function () {
+exports.config = function () {
     return access.getSet({
         get: function (key) {
             return configs[key];
@@ -268,27 +266,27 @@ var printOut = function (msg) {
 /**
  * 普通日志
  */
-console.log = function () {
+exports.log = function () {
     if (!configs._levelMap.log) {
         return;
     }
 
-    oldLog.apply(console, access.args(arguments).map(format));
+    printOut(consoleFormat.apply(null, arguments));
 };
 
 
 /**
  * 消息日志
  */
-console.info = function () {
+exports.info = function () {
     if (!configs._levelMap.info) {
         return;
     }
 
-    var out = console.format.apply(global, arguments);
+    var out = consoleFormat.apply(null, arguments);
 
     if (configs.color) {
-        out = console.pretty(out, ['green', 'bold']);
+        out = consolePretty(out, ['green', 'bold']);
     }
 
     printOut(out);
@@ -298,15 +296,15 @@ console.info = function () {
 /**
  * 警告日志
  */
-console.warn = function () {
+exports.warn = function () {
     if (!configs._levelMap.warn) {
         return;
     }
 
-    var out = console.format.apply(global, arguments);
+    var out = consoleFormat.apply(null, arguments);
 
     if (configs.color) {
-        out = console.pretty(out, ['yellow', 'bold']);
+        out = consolePretty(out, ['yellow', 'bold']);
     }
 
     printOut(out);
@@ -316,15 +314,15 @@ console.warn = function () {
 /**
  * 错误日志
  */
-console.error = function () {
+exports.error = function () {
     if (!configs._levelMap.error) {
         return;
     }
 
-    var out = console.format.apply(global, arguments);
+    var out = consoleFormat.apply(null, arguments);
 
     if (configs.color) {
-        out = console.pretty(out, ['red', 'bold']);
+        out = consolePretty(out, ['red', 'bold']);
     }
 
     printOut(out);
@@ -332,21 +330,12 @@ console.error = function () {
 
 
 /**
- * 右填充字符串
- * @param str {String} 字符串
- * @param [maxLength] {Number} 最大长度，默认为字符串长度
- * @param [padding=" "] {String} 填充字符串
- * @returns {String}
- */
-var padRight = 
-
-/**
  * 表格
  * @param trs
  * @param options
  * @returns {string}
  */
-console.table = function (trs, options) {
+exports.table = function (trs, options) {
     options = object.assign({
         padding: 1,
         thead: false,
@@ -413,7 +402,7 @@ console.table = function (trs, options) {
 
     var out = ret.join('\n');
 
-    printOut(console.pretty(out, options.colors));
+    printOut(consolePretty(out, options.colors));
 };
 
 
@@ -421,7 +410,7 @@ console.table = function (trs, options) {
  * 打点
  * @param str
  */
-console.point = function (str) {
+var consolePoint = exports.point = function (str) {
     str = String(str) || '.';
     try {
         process.stdout.clearLine();
@@ -431,7 +420,7 @@ console.point = function (str) {
     }
     process.stdout.write(str);
 };
-console.pointEnd = function () {
+var consolePointEnd = exports.pointEnd = function () {
     try {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
@@ -442,14 +431,14 @@ console.pointEnd = function () {
 
 
 var lineCursor = 0;
-console.lineStart = function () {
+exports.lineStart = function () {
     lineCursor = 0;
 };
 /**
  * 打线
  * @param str
  */
-console.line = function (str) {
+exports.line = function (str) {
     str = String(str) || '=';
     try {
         process.stdout.cursorTo(lineCursor);
@@ -459,11 +448,11 @@ console.line = function (str) {
     process.stdout.write(str);
     lineCursor += str.length;
 };
-console.lineEnd = function (clear) {
+exports.lineEnd = function (clear) {
     lineCursor = 0;
 
     if (clear) {
-        global.console.pointEnd();
+        consolePointEnd();
     } else {
         process.stdout.write('\n');
     }
@@ -471,9 +460,9 @@ console.lineEnd = function (clear) {
 
 var dictionaries = ['-', '\\', '|', '/', '-', '\\', '|', '/'];
 var timer = 0;
-console.loading = function (interval, _dictionaries) {
+var consoleLoading = exports.loading = function (interval, _dictionaries) {
     if (timer) {
-        global.console.loadingEnd();
+        consoleLoadingEnd();
     }
 
     var args = access.args(arguments);
@@ -489,15 +478,13 @@ console.loading = function (interval, _dictionaries) {
     var length = _dictionaries.length - 1;
     timer = setInterval(function () {
         var index = times % length;
-        global.console.point(_dictionaries[index]);
+        consolePoint(_dictionaries[index]);
         times++;
     }, interval);
 };
-console.loadingEnd = function () {
+var consoleLoadingEnd = exports.loadingEnd = function () {
     clearInterval(timer);
     timer = 0;
-    global.console.pointEnd();
+    consolePointEnd();
 };
 
-
-module.exports = console;
