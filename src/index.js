@@ -212,7 +212,7 @@ var consolePretty = exports.pretty = function (_out/*arguments*/, _colors) {
 var configs = {
     // 是否颜色输出
     // PM2 环境不建议输出颜色，否则日志文件内有很多颜色代码
-    color: true,
+    colorful: true,
     // 日志级别
     // 生产环境建议只打印出 warn、error 日志
     level: [
@@ -285,7 +285,7 @@ exports.info = function () {
 
     var out = consoleFormat.apply(null, arguments);
 
-    if (configs.color) {
+    if (configs.colorful) {
         out = consolePretty(out, ['green', 'bold']);
     }
 
@@ -303,7 +303,7 @@ exports.warn = function () {
 
     var out = consoleFormat.apply(null, arguments);
 
-    if (configs.color) {
+    if (configs.colorful) {
         out = consolePretty(out, ['yellow', 'bold']);
     }
 
@@ -321,7 +321,7 @@ exports.error = function () {
 
     var out = consoleFormat.apply(null, arguments);
 
-    if (configs.color) {
+    if (configs.colorful) {
         out = consolePretty(out, ['red', 'bold']);
     }
 

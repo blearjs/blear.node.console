@@ -20,9 +20,9 @@ describe('测试文件', function () {
     });
 
 
-    it('out color:true', function () {
+    it('out colorful:true', function () {
         console.config({
-            color: true
+            colorful: true
         });
         console.log('--------------------');
         console.log();
@@ -46,12 +46,12 @@ describe('测试文件', function () {
     });
 
 
-    it('out color:false, level: []', function () {
+    it('out colorful:false, level: []', function () {
         console.config({
-            color: false,
+            colorful: false,
             level: []
         });
-        expect(console.config('color')).to.equal(false);
+        expect(console.config('colorful')).to.equal(false);
         console.log('--------------------');
         console.log();
         console.log();
