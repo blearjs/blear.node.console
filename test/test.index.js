@@ -17,13 +17,16 @@ describe('测试文件', function () {
         object.each(console.colors, function (color) {
             console.log(console.colors[color](color));
         });
+        console.log();
     });
 
 
     it('out colorful:true', function () {
         console.config({
-            colorful: true
+            colorful: true,
+            level: ['log', 'info', 'warn', 'error']
         });
+        console.log();
         console.log('--------------------');
         console.log();
         console.log();
@@ -46,11 +49,12 @@ describe('测试文件', function () {
     });
 
 
-    it('out colorful:false, level: []', function () {
+    it('out colorful:false, level: [warn]', function () {
         console.config({
             colorful: false,
-            level: []
+            level: ['warn']
         });
+        console.log();
         expect(console.config('colorful')).to.equal(false);
         console.log('--------------------');
         console.log();
@@ -105,6 +109,35 @@ describe('测试文件', function () {
         });
     });
 
+    it('.xxxwithTime', function () {
+        console.config({
+            colorful: true,
+            level: ['log', 'info', 'warn', 'error']
+        });
+        console.logWithTime();
+        console.logWithTime('log');
+        console.infoWithTime();
+        console.infoWithTime('info');
+        console.warnWithTime();
+        console.warnWithTime('warn');
+        console.errorWithTime();
+        console.errorWithTime('error');
+    });
+
+    it('.xxxwithTime', function () {
+        console.config({
+            colorful: false,
+            level: ['log', 'info', 'warn', 'error']
+        });
+        console.logWithTime();
+        console.logWithTime('log');
+        console.infoWithTime();
+        console.infoWithTime('info');
+        console.warnWithTime();
+        console.warnWithTime('warn');
+        console.errorWithTime();
+        console.errorWithTime('error');
+    });
 
     it('串行', function (done) {
         howdo

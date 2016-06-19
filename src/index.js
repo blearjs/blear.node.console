@@ -13,6 +13,8 @@ var collection = require('blear.utils.collection');
 var object = require('blear.utils.object');
 var typeis = require('blear.utils.typeis');
 var string = require('blear.utils.string');
+var date = require('blear.utils.date');
+var array = require('blear.utils.array');
 
 
 var colorCodes = {
@@ -221,17 +223,26 @@ var configs = {
         'warn',
         'error'
     ],
-    // 内容部变量
-    _levelMap: {}
+    timePrefix: 'YYYY-MM-DD HH:mm:ss.SSS',
+    timeColors: ['cyan', 'bold'],
+    logColors: [],
+    infoColors: ['green', 'bold'],
+    warnColors: ['yellow', 'bold'],
+    errorColors: ['red', 'bold']
 };
 
 
-// 生成配置日志级别 map
-var buildConfigLevelMap = function () {
-    configs._levelMap = {};
-    collection.each(configs.level, function (index, type) {
-        configs._levelMap[type] = true;
-    });
+// 配置之后
+var afterConfigSet = function () {
+    configs._levelMap = array.reduce(configs.level, function (prev, now) {
+        prev[now] = true;
+        return prev;
+    }, {});
+    configs._timeColors = configs.colorful ? configs.timeColors : [];
+    configs._logColors = configs.colorful ? configs.logColors : [];
+    configs._infoColors = configs.colorful ? configs.infoColors : [];
+    configs._warnColors = configs.colorful ? configs.warnColors : [];
+    configs._errorColors = configs.colorful ? configs.errorColors : [];
 };
 
 
@@ -246,12 +257,12 @@ exports.config = function () {
         },
         set: function (key, val) {
             configs[key] = val;
-            buildConfigLevelMap();
+            afterConfigSet();
         },
         setLength: 2
     }, arguments);
 };
-buildConfigLevelMap();
+afterConfigSet();
 
 
 /**
@@ -263,69 +274,84 @@ var printOut = function (msg) {
 };
 
 
-/**
- * 普通日志
- */
+var printWrap = function (args, colors) {
+    var msg = consoleFormat.apply(null, args);
+    return consolePretty(msg, colors);
+};
+
+
+// =============================== console ============================
+
+
 exports.log = function () {
     if (!configs._levelMap.log) {
         return;
     }
 
-    printOut(consoleFormat.apply(null, arguments));
+    printOut(printWrap(arguments, configs._logColors));
 };
-
-
-/**
- * 消息日志
- */
 exports.info = function () {
     if (!configs._levelMap.info) {
         return;
     }
 
-    var out = consoleFormat.apply(null, arguments);
-
-    if (configs.colorful) {
-        out = consolePretty(out, ['green', 'bold']);
-    }
-
-    printOut(out);
+    printOut(printWrap(arguments, configs._infoColors));
 };
-
-
-/**
- * 警告日志
- */
 exports.warn = function () {
     if (!configs._levelMap.warn) {
         return;
     }
 
-    var out = consoleFormat.apply(null, arguments);
-
-    if (configs.colorful) {
-        out = consolePretty(out, ['yellow', 'bold']);
-    }
-
-    printOut(out);
+    printOut(printWrap(arguments, configs.colorful ? ['yellow', 'bold'] : []));
 };
-
-
-/**
- * 错误日志
- */
 exports.error = function () {
     if (!configs._levelMap.error) {
         return;
     }
 
-    var out = consoleFormat.apply(null, arguments);
+    printOut(printWrap(arguments, configs.colorful ? ['red', 'bold'] : []));
+};
 
-    if (configs.colorful) {
-        out = consolePretty(out, ['red', 'bold']);
+
+exports.logWithTime = function () {
+    if (!configs._levelMap.log) {
+        return;
     }
 
-    printOut(out);
+    printOut([
+        printWrap([date.format(configs.timePrefix)], configs._timeColors),
+        printWrap(arguments, configs._logColors)
+    ].join(' '));
+};
+exports.infoWithTime = function () {
+    if (!configs._levelMap.info) {
+        return;
+    }
+
+    printOut([
+        printWrap([date.format(configs.timePrefix)], configs._timeColors),
+        printWrap(arguments, configs._infoColors)
+    ].join(' '));
+};
+exports.warnWithTime = function () {
+    if (!configs._levelMap.warn) {
+        return;
+    }
+
+    printOut([
+        printWrap([date.format(configs.timePrefix)], configs._timeColors),
+        printWrap(arguments, configs._warnColors)
+    ].join(' '));
+};
+exports.errorWithTime = function () {
+    if (!configs._levelMap.error) {
+        return;
+    }
+
+    printOut([
+        printWrap([date.format(configs.timePrefix)], configs._timeColors),
+        printWrap(arguments, configs._errorColors)
+    ].join(' '));
 };
 
 
@@ -460,7 +486,7 @@ exports.lineEnd = function (clear) {
 
 var dictionaries = ['-', '\\', '|', '/', '-', '\\', '|', '/'];
 var timer = 0;
-var consoleLoading = exports.loading = function (interval, _dictionaries) {
+exports.loading = function (interval, _dictionaries) {
     if (timer) {
         consoleLoadingEnd();
     }

@@ -1,6 +1,6 @@
 {
   "name": "blear.node.console",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Node 控制台",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
@@ -40,8 +40,9 @@
     "blear.polyfills.array": "^1.0.3",
     "blear.polyfills.object": "^1.0.1",
     "blear.utils.access": "^1.0.2",
-    "blear.utils.array": "^1.0.4",
+    "blear.utils.array": "^1.0.6",
     "blear.utils.collection": "^1.0.3",
+    "blear.utils.date": "^1.0.2",
     "blear.utils.object": "^1.0.2",
     "blear.utils.typeis": "^1.0.2"
   },
@@ -50,7 +51,6 @@
     "blear.polyfills.date": "^1.0.1",
     "blear.polyfills.string": "^1.0.1",
     "blear.polyfills.time": "^1.0.3",
-    "blear.utils.date": "^1.0.2",
     "blear.utils.howdo": "^1.0.1",
     "blear.utils.number": "^1.0.1",
     "blear.utils.string": "^1.0.3",
