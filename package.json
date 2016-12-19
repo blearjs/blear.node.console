@@ -1,6 +1,6 @@
 {
   "name": "blear.node.console",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Node 控制台",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
@@ -37,8 +37,6 @@
     "url": "https://github.com/blearjs/blear.node.template/issues"
   },
   "dependencies": {
-    "blear.polyfills.array": "^1.0.3",
-    "blear.polyfills.object": "^1.0.1",
     "blear.utils.access": "^1.0.2",
     "blear.utils.array": "^1.0.6",
     "blear.utils.collection": "^1.0.3",
