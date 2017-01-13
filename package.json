@@ -1,6 +1,6 @@
 {
   "name": "blear.node.console",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Node 控制台",
   "scripts": {
     "live": "browser-sync start --config bs-config.js",
