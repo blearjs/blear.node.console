@@ -363,10 +363,14 @@ exports.errorWithTime = function () {
  */
 exports.table = function (trs, options) {
     options = object.assign({
+        // 内边距
         padding: 1,
+        // 是否有表头
         thead: false,
+        // 外边框
         border: false,
-        styles: []
+        // 附加颜色
+        colors: []
     }, options);
     var maxTrLength = 0;
     var maxTdsLength = [];
