@@ -440,8 +440,9 @@ exports.table = function (trs, options) {
  * 打点
  * @param str
  */
-var consolePoint = exports.point = function (str) {
-    str = String(str) || '.';
+var consolePoint = function (str) {
+    str = String(str || '.');
+
     try {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
@@ -450,7 +451,7 @@ var consolePoint = exports.point = function (str) {
     }
     process.stdout.write(str);
 };
-var consolePointEnd = exports.pointEnd = function () {
+var consolePointEnd = function () {
     try {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
@@ -469,15 +470,18 @@ exports.lineStart = function () {
  * @param str
  */
 exports.line = function (str) {
-    str = String(str) || '=';
+    str = String(str || '=');
+
     try {
         process.stdout.cursorTo(lineCursor);
     } catch (err) {
         // ignore
     }
+
     process.stdout.write(str);
     lineCursor += str.length;
 };
+
 exports.lineEnd = function (clear) {
     lineCursor = 0;
 

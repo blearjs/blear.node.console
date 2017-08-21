@@ -142,22 +142,6 @@ describe('测试文件', function () {
     it('串行', function (done) {
         howdo
             .task(function (done) {
-                var points = ['-', '=', '>', '|', '<', '='];
-                var times = 0;
-                var time = setInterval(function () {
-                    var index = times % (points.length - 1);
-                    console.point(points[index]);
-
-                    if (times === 30) {
-                        clearInterval(time);
-                        console.pointEnd();
-                        done();
-                    }
-
-                    times++;
-                }, 100);
-            })
-            .task(function (done) {
                 console.loading();
                 console.loading();
                 setTimeout(function () {
