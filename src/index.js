@@ -440,7 +440,7 @@ exports.table = function (trs, options) {
  * 打点
  * @param str
  */
-var consolePoint = function (str) {
+var consolePoint = exports.point = function (str) {
     str = String(str || '.');
 
     try {
@@ -451,7 +451,7 @@ var consolePoint = function (str) {
     }
     process.stdout.write(str);
 };
-var consolePointEnd = function () {
+var consolePointEnd = exports.pointEnd = function () {
     try {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
