@@ -52,7 +52,7 @@
     "blear.utils.plan": "^2.2.1",
     "blear.utils.string": "^1.0.9",
     "blear.utils.time": "^1.0.6",
-    "chai": "^4.1.2",
+    "chai-jasmine": "^1.0.7",
     "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },

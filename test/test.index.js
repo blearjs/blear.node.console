@@ -7,10 +7,10 @@
 
 'use strict';
 
-var expect = require('chai').expect;
+var expect = require('chai-jasmine').expect;
 var console = require('../src/index.js');
 var object = require('blear.utils.object');
-var howdo = require('blear.utils.howdo');
+var plan = require('blear.utils.plan');
 
 describe('测试文件', function () {
     it('color', function () {
@@ -55,7 +55,7 @@ describe('测试文件', function () {
             level: ['warn']
         });
         console.log();
-        expect(console.config('colorful')).to.equal(false);
+        expect(console.config('colorful')).toEqual(false);
         console.log('--------------------');
         console.log();
         console.log();
@@ -140,7 +140,7 @@ describe('测试文件', function () {
     });
 
     it('串行', function (done) {
-        howdo
+        plan
             .task(function (done) {
                 var points = ['-', '=', '>', '|', '<', '='];
                 var times = 0;
@@ -200,7 +200,12 @@ describe('测试文件', function () {
                     }
                 }, 100);
             })
-            .follow(done);
+            .serial(done);
+    });
+
+    it('.width', function () {
+        expect(console.width('1')).toEqual(1);
+        expect(console.width('中')).toEqual(2);
     });
 });
 
