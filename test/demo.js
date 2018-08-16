@@ -10,6 +10,23 @@
 
 var console = require('../src/index');
 
+console.table([
+    ['#', 'username', 'age'],
+    ['1', 'zhangsan', '20'],
+    ['2', 'lisi', '30'],
+    ['3', 'John smith', '29'],
+    ['4', '诸葛付女士', '29']
+]);
+
+var chinese = '诸葛付女士';
+console.log(
+    chinese + '好a|',
+    (chinese).length,
+    console.width(chinese),
+    new Buffer(chinese).length,
+    Buffer.byteLength(chinese,'utf8')
+);
+console.log('12345567890|');
 
 // console.log('console', 'log');
 // console.info('console', 'info');
@@ -20,16 +37,16 @@ var console = require('../src/index');
 // console.warnWithTime('console', 'warn', 'withTime');
 // console.errorWithTime('console', 'error', 'withTime');
 
-var points = ['-', '=', '>', '|', '<', '='];
-var times = 0;
-var time = setInterval(function () {
-    var index = times % (points.length - 1);
-    console.point(points[index]);
-
-    if (times === 30) {
-        clearInterval(time);
-        console.pointEnd();
-    }
-
-    times++;
-}, 300);
+// var points = ['-', '=', '>', '|', '<', '='];
+// var times = 0;
+// var time = setInterval(function () {
+//     var index = times % (points.length - 1);
+//     console.point(points[index]);
+//
+//     if (times === 30) {
+//         clearInterval(time);
+//         console.pointEnd();
+//     }
+//
+//     times++;
+// }, 300);

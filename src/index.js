@@ -12,9 +12,10 @@ var access = require('blear.utils.access');
 var collection = require('blear.utils.collection');
 var object = require('blear.utils.object');
 var typeis = require('blear.utils.typeis');
-var string = require('blear.utils.string');
 var date = require('blear.utils.date');
 var array = require('blear.utils.array');
+var stripAnsi = require('strip-ansi');
+var wcwidth = require('wcwidth');
 
 
 var colorCodes = {
@@ -380,7 +381,13 @@ exports.table = function (trs, options) {
     collection.each(trs, function (i, tds) {
         collection.each(tds, function (j, td) {
             tds[j] = td = format(td);
-            var tdLength = td.length
+
+            var tdLength = width(td);
+
+            if (j === 1) {
+                console.log(td, tdLength);
+            }
+
             tdLength += options.padding * 2;
             maxTdsLength[j] = maxTdsLength[j] || 0;
             maxTdsLength[j] = Math.max(maxTdsLength[j], tdLength);
@@ -417,7 +424,9 @@ exports.table = function (trs, options) {
 
         collection.each(tds, function (j, td) {
             td = padding + td;
-            td = string.padEnd(td, maxTdsLength[j] - options.padding, ' ');
+            // console.log('before pad', '|' + td + '|');
+            td = padEnd(td, maxTdsLength[j] - options.padding, ' ');
+            // console.log('after  pad', '|' + td + '|', maxTdsLength[j] - options.padding);
             tr.push(td + padding);
         });
 
@@ -479,7 +488,7 @@ exports.line = function (str) {
     }
 
     process.stdout.write(str);
-    lineCursor += str.length;
+    lineCursor += width(str);
 };
 
 exports.lineEnd = function (clear) {
@@ -522,3 +531,25 @@ var consoleLoadingEnd = exports.loadingEnd = function () {
     consolePointEnd();
 };
 
+
+var width = exports.width = function (str) {
+    return wcwidth(stripAnsi(str));
+};
+
+/**
+ * 后填空白
+ * @param str
+ * @param max
+ * @param char
+ * @returns {*}
+ */
+function padEnd(str, max, char) {
+    var len = width(str);
+
+    while (max - len > 0) {
+        str += char;
+        len++;
+    }
+
+    return str;
+}
