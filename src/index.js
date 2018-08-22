@@ -383,11 +383,6 @@ exports.table = function (trs, options) {
             tds[j] = td = format(td);
 
             var tdLength = width(td);
-
-            if (j === 1) {
-                console.log(td, tdLength);
-            }
-
             tdLength += options.padding * 2;
             maxTdsLength[j] = maxTdsLength[j] || 0;
             maxTdsLength[j] = Math.max(maxTdsLength[j], tdLength);
