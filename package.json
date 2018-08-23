@@ -28,13 +28,13 @@
     "url": "http://ydr.me"
   },
   "contributors": [],
-  "homepage": "https://github.com/blearjs/blear.node.template",
+  "homepage": "https://github.com/blearjs/blear.node.console",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blearjs/blear.node.template"
+    "url": "https://github.com/blearjs/blear.node.console"
   },
   "bugs": {
-    "url": "https://github.com/blearjs/blear.node.template/issues"
+    "url": "https://github.com/blearjs/blear.node.console/issues"
   },
   "dependencies": {
     "blear.utils.access": "^1.0.5",
