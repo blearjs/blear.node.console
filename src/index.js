@@ -128,7 +128,7 @@ var makeColor = function (color) {
         args.push('\x1b[' + colorCodes[color][0] + 'm%s\x1b[' + colorCodes[color][1] + 'm');
         args.push(msg);
 
-        return util.format.apply(util, args);
+        return consoleFormat.apply(null, args);
     };
 };
 
@@ -180,7 +180,7 @@ exports.colors = {
  * @returns {string}
  */
 var consoleFormat = exports.format = function (/*arguments*/) {
-    return access.args(arguments).map(format).join(' ');
+    return util.format.apply(util, arguments);
 };
 
 
